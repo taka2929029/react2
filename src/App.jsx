@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import "./styles.css";
+import { InputTodo } from "./components/inputTodo";
+import { IncompleteTodo } from "./components/incompleteTodos";
+import { CompleteTodo } from "./components/completeTodos";
 
 export const App = () => {
   const [todoText, settodoText] = useState("");
@@ -37,11 +40,26 @@ export const App = () => {
 
     const newIncompleteTodos = [...incompleteTodos, completeTodos[index]];
     setincompleteTodos(newIncompleteTodos);
-
-  }
+  };
 
   return (
     <>
+      <InputTodo
+        todoText={todoText}
+        onchangeTodoText={onchangeTodoText}
+        onClickAdd={onClickAdd}
+        disabled={incompleteTodos.length >= 5}
+      />
+      {incompleteTodos.length >= 5 && (
+        <p style={{ color: "red" }}>登録できるtodoは5個までです</p>
+      )}
+      <IncompleteTodo
+        incompleteTodos={incompleteTodos}
+        onClickComplete={onClickComplete}
+        onClickDelete={onClickDelete}
+      />
+      <CompleteTodo completeTodos={completeTodos} onClickBack={onClickBack} />
+
       <div className="input-area">
         <input
           placeholder="TODOを入力"
@@ -50,6 +68,7 @@ export const App = () => {
         />
         <button onClick={onClickAdd}>追加</button>
       </div>
+
       <div className="incomplete-area">
         <p className="title">未完了のTOD</p>
         <ul>
@@ -64,6 +83,7 @@ export const App = () => {
           })}
         </ul>
       </div>
+
       <div className="complete-area">
         <p className="title">完了のTOD</p>
         <ul>
